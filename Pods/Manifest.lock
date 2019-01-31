@@ -1,0 +1,16 @@
+PODS:
+  - DGActivityIndicatorView (2.1.1)
+
+DEPENDENCIES:
+  - DGActivityIndicatorView
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - DGActivityIndicatorView
+
+SPEC CHECKSUMS:
+  DGActivityIndicatorView: ff2c76073d79692f724863c8dd38685866a03cb6
+
+PODFILE CHECKSUM: e0da10a52125e9d84e69bbc9dd2e17fa8f25afec
+
+COCOAPODS: 1.5.3

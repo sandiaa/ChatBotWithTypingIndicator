@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="NunitoSans-SemiBold.ttf">
+            <string>NunitoSans-SemiBold</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="UserCell" customModule="ChatOnboarding" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="308" height="84"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="308" height="84"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SQx-1E-5mf">
+                        <rect key="frame" x="198" y="0.0" width="100" height="84"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vZr-dJ-nAf">
+                                <rect key="frame" x="10" y="10" width="80" height="64"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" name="NunitoSans-SemiBold" family="Nunito Sans" pointSize="16"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.49803921569999998" green="0.32156862749999998" blue="0.83921568629999999" alpha="0.88441780820000004" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="vZr-dJ-nAf" secondAttribute="bottom" constant="10" id="MuU-bk-DbO"/>
+                            <constraint firstItem="vZr-dJ-nAf" firstAttribute="top" secondItem="SQx-1E-5mf" secondAttribute="top" constant="10" id="fg4-BB-bVk"/>
+                            <constraint firstItem="vZr-dJ-nAf" firstAttribute="leading" secondItem="SQx-1E-5mf" secondAttribute="leading" constant="10" id="iQC-SG-fo2"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="o32-eT-1IE"/>
+                            <constraint firstAttribute="trailing" secondItem="vZr-dJ-nAf" secondAttribute="trailing" constant="10" id="o3Y-CZ-CyR"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="SQx-1E-5mf" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="100" id="7Ow-ER-aPg"/>
+                <constraint firstAttribute="trailing" secondItem="SQx-1E-5mf" secondAttribute="trailing" constant="10" id="Ie3-DZ-qLj"/>
+                <constraint firstItem="SQx-1E-5mf" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="Jvk-vF-Oef"/>
+                <constraint firstAttribute="bottom" secondItem="SQx-1E-5mf" secondAttribute="bottom" id="zvY-Ve-4S3"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <size key="customSize" width="308" height="84"/>
+            <connections>
+                <outlet property="baseView" destination="SQx-1E-5mf" id="BkV-4c-ff5"/>
+                <outlet property="textLabel" destination="vZr-dJ-nAf" id="Bkg-p9-Xqj"/>
+            </connections>
+            <point key="canvasLocation" x="336" y="169.11544227886057"/>
+        </collectionViewCell>
+    </objects>
+</document>
