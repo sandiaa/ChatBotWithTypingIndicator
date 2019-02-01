@@ -305,6 +305,7 @@ extension ChatController : UITextFieldDelegate {
             else {
                 UserDefaults.standard.set((txtField.text ?? ""), forKey: REGISTERED_PASSWORD)
                 dataSource.append(.signinRegisteredPassword)
+                self.txtField.textContentType = .username
                 txtField.text = ""
                 processLastChat()
                 
@@ -330,6 +331,7 @@ extension ChatController : UITextFieldDelegate {
             else {
                 UserDefaults.standard.set((txtField.text ?? ""), forKey: SIGNUP_PASSWORD)
                 dataSource.append(.passwordToMatch)
+                self.txtField.textContentType = .username
                 txtField.text = ""
                 processLastChat()
         }

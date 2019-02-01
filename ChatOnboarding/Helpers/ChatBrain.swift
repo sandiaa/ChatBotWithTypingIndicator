@@ -72,7 +72,7 @@ enum ChatType {
     case okay
     case doneSignup
     case none
-    
+
     func getSuggestions() -> [ChatType]{
         switch self {
         case .hi:
@@ -318,6 +318,18 @@ enum ChatType {
             return .suggestion
         }
     }
+    func getContentType() -> UITextContentType {
+        switch self{
+        case .signinEmail, .wrongSignInEmail, .signupEmail, .wrongSignupEmail:
+            return .emailAddress
+        case .signinPassword,.signinEmojiPassword,.signinInvalidPassword, .signupPassword,.signupInvalidPassword,.signupEmojiPassword:
+            return .password
+        case .mobile,.wrongMobile:
+            return .telephoneNumber
+        default :
+            return .name
+        }
+    }
     
     func getKeyboardType() -> UIKeyboardType {
         switch self {
@@ -354,6 +366,7 @@ enum ChatType {
         return imageView!
         
     }
+    
     
     
 }

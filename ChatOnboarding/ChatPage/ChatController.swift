@@ -31,7 +31,7 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
     var player: AVAudioPlayer?
     var shouldShowTypingCell = false
     var currentUserChatType = ChatType.none
-    var didRestart = false
+//    var didRestart = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -128,9 +128,10 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
                     lcNumberDoneButtonWidth.constant = 100
                     view.layoutIfNeeded()
                 }
+                txtField.textContentType = .init(rawValue: "")
+                txtField.isSecureTextEntry = chatType.isTextFieldSecure()
                 txtField.keyboardType = chatType.getKeyboardType()
                 txtField.placeholder = chatType.getPlaceholderText()
-                txtField.isSecureTextEntry = chatType.isTextFieldSecure()
                 txtField.returnKeyType = .done
                 
                 if chatType == .wrongSignInEmail || chatType == .signinEmojiPassword || chatType == .signinInvalidPassword ||
@@ -194,7 +195,7 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
             }) { (finished) in
                 if botResponse != .none && botResponse.getTimeDelay() > 0.0 {
                     self.currentUserChatType = chatType
-                    self.perform(#selector(self.hideTypingCellAndShowBotResponse), with: nil, afterDelay: botResponse.getTimeDelay())
+                    self.perform(#selector(self.hideTypingCellAndShowBotResponse), with: nil, afterDelay: chatType.getTimeDelay())
                 }
                 else {
                     self.processLastChat()
@@ -209,10 +210,10 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
     }
     
     @objc func hideTypingCellAndShowBotResponse() {
-        if didRestart {
-            didRestart  = false
-            return
-        }
+//        if didRestart {
+//            didRestart  = false
+//            return
+//        }
         self.shouldShowTypingCell = false
         let typingCellIndexPath = IndexPath(row: dataSource.count, section: 0)
         
@@ -265,10 +266,11 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
    //     fullImageView.removeFromSuperview()
         let alert = UIAlertController(title: "Alert", message: "Would you like to Restart", preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
-            self.didRestart = true
+//            self.didRestart = true
             self.txtField.text = ""
             self.txtField.resignFirstResponder()
             self.datePickerView.isHidden = true
+            
             self.shouldShowTypingCell = false
             self.perform(#selector(self.resetCollectionView), with: nil, afterDelay: 0.0)
         }))
