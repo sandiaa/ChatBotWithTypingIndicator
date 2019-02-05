@@ -8,5 +8,6 @@ target 'ChatOnboarding' do
   # Pods for ChatOnboarding
 
 pod 'DGActivityIndicatorView'
+pod 'CropViewController'
 
 end

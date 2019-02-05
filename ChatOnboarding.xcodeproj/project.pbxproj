@@ -8,11 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		1EEE1542B2C942284038BEC8 /* Pods_ChatOnboarding.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 675D43CC948F2DBC88A97417 /* Pods_ChatOnboarding.framework */; };
+		FC4EBFC322047168002CBAE4 /* ChatOnboarding.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FC4EBFC122047168002CBAE4 /* ChatOnboarding.xcdatamodeld */; };
 		FC6CE4DB21FB354D005D9649 /* TypingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6CE4D921FB354D005D9649 /* TypingCell.swift */; };
 		FC6CE4DC21FB354D005D9649 /* TypingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC6CE4DA21FB354D005D9649 /* TypingCell.xib */; };
 		FC76B97C21F89253007FB104 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC76B97B21F89253007FB104 /* UIImageExtension.swift */; };
 		FC76B97F21F89545007FB104 /* AvatarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC76B97D21F89545007FB104 /* AvatarCell.swift */; };
 		FC76B98021F89545007FB104 /* AvatarCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC76B97E21F89545007FB104 /* AvatarCell.xib */; };
+		FC91624B2208128000993750 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC91624A2208128000993750 /* UserManager.swift */; };
 		FCADC3FC21F9D882002B49F9 /* ChatBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCADC3FB21F9D882002B49F9 /* ChatBrain.swift */; };
 		FCB33E7B21F6F0980098A4A1 /* DatePickerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB33E7A21F6F0980098A4A1 /* DatePickerExtension.swift */; };
 		FCC2A31B2203204B00497DCD /* UserTone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FCC2A31A2203204B00497DCD /* UserTone.mp3 */; };
@@ -45,11 +47,13 @@
 		675D43CC948F2DBC88A97417 /* Pods_ChatOnboarding.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChatOnboarding.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		96E27D8C8710C85F3BBB72BE /* Pods-ChatOnboarding.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatOnboarding.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatOnboarding/Pods-ChatOnboarding.debug.xcconfig"; sourceTree = "<group>"; };
 		D5305A66EACB57DBF359C80C /* Pods-ChatOnboarding.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatOnboarding.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatOnboarding/Pods-ChatOnboarding.release.xcconfig"; sourceTree = "<group>"; };
+		FC4EBFC222047168002CBAE4 /* ChatOnboarding.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ChatOnboarding.xcdatamodel; sourceTree = "<group>"; };
 		FC6CE4D921FB354D005D9649 /* TypingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingCell.swift; sourceTree = "<group>"; };
 		FC6CE4DA21FB354D005D9649 /* TypingCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TypingCell.xib; sourceTree = "<group>"; };
 		FC76B97B21F89253007FB104 /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		FC76B97D21F89545007FB104 /* AvatarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarCell.swift; sourceTree = "<group>"; };
 		FC76B97E21F89545007FB104 /* AvatarCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AvatarCell.xib; sourceTree = "<group>"; };
+		FC91624A2208128000993750 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		FCADC3FB21F9D882002B49F9 /* ChatBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBrain.swift; sourceTree = "<group>"; };
 		FCB33E7A21F6F0980098A4A1 /* DatePickerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerExtension.swift; sourceTree = "<group>"; };
 		FCC2A31A2203204B00497DCD /* UserTone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = UserTone.mp3; sourceTree = "<group>"; };
@@ -146,6 +150,7 @@
 				FCEF60D021F1AE74006C7FCF /* Zombies */,
 				FCEF60C521F1AE5F006C7FCF /* Assets.xcassets */,
 				FCEF60CA21F1AE5F006C7FCF /* Info.plist */,
+				FC4EBFC122047168002CBAE4 /* ChatOnboarding.xcdatamodeld */,
 			);
 			path = ChatOnboarding;
 			sourceTree = "<group>";
@@ -203,6 +208,7 @@
 				FCEF60E321F1B333006C7FCF /* SpringLayout.swift */,
 				FCEF60F721F1B965006C7FCF /* centerAlignedFlowLayout.swift */,
 				FCADC3FB21F9D882002B49F9 /* ChatBrain.swift */,
+				FC91624A2208128000993750 /* UserManager.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -318,12 +324,14 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-ChatOnboarding/Pods-ChatOnboarding-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/CropViewController/CropViewController.framework",
 				"${BUILT_PRODUCTS_DIR}/DGActivityIndicatorView/DGActivityIndicatorView.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CropViewController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DGActivityIndicatorView.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -369,6 +377,7 @@
 				FCEF60E621F1B371006C7FCF /* ChatControllerCollectionViewExtension.swift in Sources */,
 				FC76B97F21F89545007FB104 /* AvatarCell.swift in Sources */,
 				FCEF60F421F1B8D1006C7FCF /* AllSuggestionsCell.swift in Sources */,
+				FC91624B2208128000993750 /* UserManager.swift in Sources */,
 				FCADC3FC21F9D882002B49F9 /* ChatBrain.swift in Sources */,
 				FCB33E7B21F6F0980098A4A1 /* DatePickerExtension.swift in Sources */,
 				FCEF60FA21F1E9D9006C7FCF /* StringExtension.swift in Sources */,
@@ -376,6 +385,7 @@
 				FCEF60F821F1B966006C7FCF /* centerAlignedFlowLayout.swift in Sources */,
 				FCEF60E421F1B333006C7FCF /* SpringLayout.swift in Sources */,
 				FCEF60ED21F1B63C006C7FCF /* UIColorExtension.swift in Sources */,
+				FC4EBFC322047168002CBAE4 /* ChatOnboarding.xcdatamodeld in Sources */,
 				FCEF60D421F1AE9A006C7FCF /* ChatController.swift in Sources */,
 				FC76B97C21F89253007FB104 /* UIImageExtension.swift in Sources */,
 			);
@@ -581,6 +591,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		FC4EBFC122047168002CBAE4 /* ChatOnboarding.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				FC4EBFC222047168002CBAE4 /* ChatOnboarding.xcdatamodel */,
+			);
+			currentVersion = FC4EBFC222047168002CBAE4 /* ChatOnboarding.xcdatamodel */;
+			path = ChatOnboarding.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = FCEF60B321F1AE5E006C7FCF /* Project object */;
 }

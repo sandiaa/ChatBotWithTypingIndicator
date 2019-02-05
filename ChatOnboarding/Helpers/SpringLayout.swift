@@ -2,8 +2,8 @@
 //  SpringLayout.swift
 //  ChatBotApp
 //
-//  Created by Admin on 07/01/19.
-//  Copyright © 2019 Admin. All rights reserved.
+//  Created by Sandiaa on 07/01/19.
+//  Copyright © 2019 Sandiaa. All rights reserved.
 //
 
 import Foundation
@@ -19,7 +19,6 @@ class SpringyFlowLayout: UICollectionViewFlowLayout {
     }
     
     func changeItemSize(width: CGFloat) {
-        //        itemSize = CGSize(width: width, height: minimumLineSpacing)
         dynamicAnimator = nil
     }
     

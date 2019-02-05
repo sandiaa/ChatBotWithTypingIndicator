@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  ChatOnboarding
 //
-//  Created by Manoj Kumar on 18/01/19.
+//  Created by Sandiaa on 18/01/19.
 //  Copyright © 2019 Sandiaa. All rights reserved.
 //
 

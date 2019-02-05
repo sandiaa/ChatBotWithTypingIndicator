@@ -1,16 +1,20 @@
 PODS:
+  - CropViewController (2.4.0)
   - DGActivityIndicatorView (2.1.1)
 
 DEPENDENCIES:
+  - CropViewController
   - DGActivityIndicatorView
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - CropViewController
     - DGActivityIndicatorView
 
 SPEC CHECKSUMS:
+  CropViewController: a090820b15fc3da68e694d7c192a4708c576828b
   DGActivityIndicatorView: ff2c76073d79692f724863c8dd38685866a03cb6
 
-PODFILE CHECKSUM: e0da10a52125e9d84e69bbc9dd2e17fa8f25afec
+PODFILE CHECKSUM: a7862c639517954adaa07c975f08ef065e8bba14
 
 COCOAPODS: 1.5.3

@@ -2,7 +2,7 @@
 //  ChatController.swift
 //  ChatOnboarding
 //
-//  Created by Manoj Kumar on 18/01/19.
+//  Created by Sandiaa on 18/01/19.
 //  Copyright © 2019 Sandiaa. All rights reserved.
 //
 
@@ -22,20 +22,17 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
     @IBOutlet weak var txtField: UITextField!
     @IBOutlet weak var textFieldBaseView: UIView!
     @IBOutlet weak var lcCollectionViewBottomSpace: NSLayoutConstraint!
-
     @IBOutlet weak var lcNumberDoneButtonWidth: NSLayoutConstraint!
     @IBOutlet weak var lcDatePickerBottomSpace: NSLayoutConstraint!
+    
     var dataSource = [ChatType]()
     var currentSuggestion = [ChatType]()
-    
     var player: AVAudioPlayer?
     var shouldShowTypingCell = false
     var currentUserChatType = ChatType.none
-//    var didRestart = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setUpView()
         dataSource.append(ChatType.hi)
         setupColletionView()
@@ -43,14 +40,19 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
         super.viewWillAppear(animated)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChangeFrame), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
     }
-
+   
+    //setpu shadow for the text label and date picker.
+    
     func setUpView() {
         textFieldBaseView.backgroundColor = .white
         textFieldBaseView.addShadowWith(shadowPath: UIBezierPath(rect: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50)).cgPath, shadowColor: UIColor.black.withAlphaComponent(0.6).cgColor, shadowOpacity: 0.5, shadowRadius: 10.0, shadowOffset: CGSize.zero)
@@ -61,11 +63,13 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
         self.lcDatePickerBottomSpace.constant = -300
         view.layoutIfNeeded()
     }
+    
+    //Collection view layout.
+    
     func setupColletionView() {
         
         chatCollectionView.delegate = self
         chatCollectionView.dataSource = self
-        
         chatCollectionView.register(UINib(nibName:"UserCell", bundle: nil), forCellWithReuseIdentifier: "UserCell")
         chatCollectionView.register(UINib(nibName:"BotCell", bundle: nil), forCellWithReuseIdentifier: "BotCell")
         chatCollectionView.register(UINib(nibName:"AllSuggestionsCell", bundle: nil), forCellWithReuseIdentifier: "AllSuggestionsCell")
@@ -76,11 +80,12 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
         springLayout.scrollDirection = .vertical
         springLayout.minimumLineSpacing = 10
         springLayout.minimumInteritemSpacing = 10
-        springLayout.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
+        springLayout.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 30, right: 0)
         chatCollectionView.setCollectionViewLayout(springLayout, animated: false)
         springLayout.invalidateLayout()
         chatCollectionView.reloadData()
     }
+    
     
     @objc private func keyboardWillChangeFrame(_ notification: Notification) {
         let endFrame = ((notification as NSNotification).userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
@@ -92,8 +97,20 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
             lcCollectionViewBottomSpace.constant = endFrame.height + 60
         }
         view.layoutIfNeeded()
-        chatCollectionView.scrollToItem(at: IndexPath(row: dataSource.count-1, section: 0), at: .bottom, animated: true)
+        if chatCollectionView.contentSize.height > chatCollectionView.frame.height {
+            chatCollectionView.setContentOffset(CGPoint(x: 0, y: chatCollectionView.contentSize.height - chatCollectionView.frame.height), animated: false)
+        }
+        else {
+            chatCollectionView.scrollToItem(at: IndexPath(row: dataSource.count-1, section: 0), at: .bottom, animated: true)
+        }
+        
+        
+        print("Collectionview height = ",chatCollectionView.frame.height, chatCollectionView.contentSize.height)
+        
     }
+    
+    
+    //Processes the chat type appended to the data source and returns the type of input for the next response by the bot.
     
     @objc func processLastChat() {
         guard let chatType = dataSource.last else {return}
@@ -103,7 +120,12 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
             if chatType.getUserInputType() == .suggestion  {
                 currentSuggestion = chatType.getSuggestions()
                 if chatType != dataSource.first {
-                    insertSuggestionCell()
+                    if chatType == .emailDoesnotExist {
+                        insertSuggestionCell(shouldAddOneMoreCell: true)
+                    }
+                    else {
+                        insertSuggestionCell(shouldAddOneMoreCell: false)
+                    }
                 }
             }
             else if chatType.getUserInputType() == .picker {
@@ -119,12 +141,19 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
                     self.view.layoutIfNeeded()
                 }, completion: nil)
                 datePickerView.superview?.bringSubviewToFront(datePickerView)
-                 chatCollectionView.scrollToItem(at: IndexPath(row: dataSource.count-1, section: 0), at: .bottom, animated: true)
+                if chatCollectionView.contentSize.height > chatCollectionView.frame.height {
+                    chatCollectionView.setContentOffset(CGPoint(x: 0, y: chatCollectionView.contentSize.height - chatCollectionView.frame.height), animated: false)
+                }
+                else {
+                    chatCollectionView.scrollToItem(at: IndexPath(row: dataSource.count-1, section: 0), at: .bottom, animated: true)
+                }
             }
             else if chatType.getUserInputType() == .textField{
                 if chatType == .mobile {
                     txtField.keyboardType = chatType.getKeyboardType()
-                    txtField.becomeFirstResponder()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                        self.txtField.becomeFirstResponder()
+                    }
                     lcNumberDoneButtonWidth.constant = 100
                     view.layoutIfNeeded()
                 }
@@ -133,11 +162,13 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
                 txtField.keyboardType = chatType.getKeyboardType()
                 txtField.placeholder = chatType.getPlaceholderText()
                 txtField.returnKeyType = .done
+               
+                //Inserts a chat for the error messages.
                 
-                if chatType == .wrongSignInEmail || chatType == .signinEmojiPassword || chatType == .signinInvalidPassword ||
-                    chatType == .wrongSignupName || chatType == .wrongSignupEmail || chatType == .signupEmojiPassword ||
+                if  chatType == .wrongSignInEmail || chatType == .signinEmojiPassword || chatType == .signinInvalidPassword || chatType == .PasswordDoesnotMatch || 
+                    chatType == .wrongSignupName || chatType == .wrongSignupEmail || chatType == .emailAlreadyExist || chatType == .signupEmojiPassword ||
                     chatType == .signupInvalidPassword || chatType == .confirmPassword || chatType == .wrongConfirmPassword ||
-                    chatType == .signupWrongDob || chatType == .wrongMobile || chatType == .declineSelected || chatType == .okay
+                    chatType == .signupWrongDob || chatType == .wrongMobile || chatType == .declineSelected || chatType == .okay || chatType == .emailDoesnotExist
                 {
                     var indexPathsToInsert = [IndexPath]()
                     var indexPathsToDelete = [IndexPath]()
@@ -153,18 +184,23 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
                         self.chatCollectionView.deleteItems(at: indexPathsToDelete)
                         self.chatCollectionView.insertItems(at: indexPathsToInsert)
                     }) { (finished) in
-                        self.txtField.becomeFirstResponder()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                            self.txtField.becomeFirstResponder()
+                        }
                     }
                 }
 
                 else {
-                    txtField.becomeFirstResponder()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                        self.txtField.becomeFirstResponder()
+                    }
                 }
         }
             else if chatType.getUserInputType() == .image{
               
             }
         }
+            
         else {
             playSound(chatType: .user)
             var indexPathsToInsert = [IndexPath]()
@@ -204,16 +240,10 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
         }
     }
     
-    func getRandomTimeDelay()->Double {
-        let randomDouble = Double.random(in: 1.0...5.0)
-        return randomDouble
-    }
+    // Display's bots response after showing the typing indicator.
     
     @objc func hideTypingCellAndShowBotResponse() {
-//        if didRestart {
-//            didRestart  = false
-//            return
-//        }
+
         self.shouldShowTypingCell = false
         let typingCellIndexPath = IndexPath(row: dataSource.count, section: 0)
         
@@ -235,12 +265,23 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
         }
     }
     
-    func insertSuggestionCell() {
+    //Inserts suggestion Cell if the input type is sugeestion.
+    
+    func insertSuggestionCell(shouldAddOneMoreCell:Bool) {
         if currentSuggestion.count > 0 {
+            var indexPathsToAdd = [IndexPath]()
+            
+            if shouldAddOneMoreCell {
+                indexPathsToAdd.append(IndexPath(row: dataSource.count-1, section: 0))
+            }
+            
             let suggestionIndexPath = IndexPath(row: dataSource.count, section: 0)
+            indexPathsToAdd.append(suggestionIndexPath)
+            
             (self.chatCollectionView.collectionViewLayout as! SpringyFlowLayout).dynamicAnimator = nil
+
             chatCollectionView.performBatchUpdates({
-                self.chatCollectionView.insertItems(at: [suggestionIndexPath])
+                self.chatCollectionView.insertItems(at: indexPathsToAdd)
             }) { (finished) in
                 if self.chatCollectionView.contentSize.height > self.chatCollectionView.frame.height {
                     self.chatCollectionView.setContentOffset(CGPoint(x: 0, y: self.chatCollectionView.contentSize.height - (self.chatCollectionView.frame.height - 30)), animated: false)
@@ -248,6 +289,8 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
             }
         }
     }
+    
+    //Webview for terms and policy.
     func setupWebView() {
         guard let url = URL(string: "https://apple.com") else {
             return
@@ -259,16 +302,22 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
 
     }
 
+
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
         controller.dismiss(animated: true, completion: nil)
     }
+    
+    //Refreshes the process.
+    
     @IBAction func restartButton(_ sender: UIButton) {
-   //     fullImageView.removeFromSuperview()
+
         let alert = UIAlertController(title: "Alert", message: "Would you like to Restart", preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
-//            self.didRestart = true
+           
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+              self.txtField.resignFirstResponder()
+            }
             self.txtField.text = ""
-            self.txtField.resignFirstResponder()
             self.datePickerView.isHidden = true
             
             self.shouldShowTypingCell = false
@@ -279,6 +328,7 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
     
     }
     
+    
     @objc func resetCollectionView() {
         dataSource.removeAll()
         dataSource.append(ChatType.hi)
@@ -286,6 +336,8 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
         chatCollectionView.reloadData()
         processLastChat()
     }
+    
+    //Executes when the done button in the date picker view is clicked.
     
     @IBAction func doneButtonPressed(_ sender: UIButton) {
        textFieldBaseView.isHidden = false
@@ -304,13 +356,19 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
         
     }
     
+    //Executes when the user clicks done after entering the phone number.
+    
     @IBAction func numberDoneButton(_ sender: UIButton) {
         view.endEditing(true)
-        txtField.resignFirstResponder()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+            self.txtField.resignFirstResponder()
+        }
+        if CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: (txtField.text ?? ""))){
         if (txtField.text ?? "").count < 10 {
             dataSource.append(.wrongMobile)
             processLastChat()
         }
+        
         else {
             txtField.isHidden = false
             textFieldBaseView.isHidden = false
@@ -320,8 +378,16 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
             dataSource.append(.registeredMobile)
             txtField.text = ""
             processLastChat()
+             }
+       }
+        else {
+            dataSource.append(.wrongMobile)
+            processLastChat()
         }
     }
+    
+    //Notification sound.
+    
     func playSound(chatType : OriginType){
     
        var tone : String = ""

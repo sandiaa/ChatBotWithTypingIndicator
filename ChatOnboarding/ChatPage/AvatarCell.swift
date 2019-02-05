@@ -2,7 +2,7 @@
 //  AvatarCell.swift
 //  ChatOnboarding
 //
-//  Created by Manoj Kumar on 23/01/19.
+//  Created by Sandiaa on 23/01/19.
 //  Copyright © 2019 Sandiaa. All rights reserved.
 //
 
@@ -15,7 +15,7 @@ class AvatarCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
          baseView.layer.cornerRadius = 10
-        img.layer.cornerRadius = 10
+         img.layer.cornerRadius = 10
     }
 
 }

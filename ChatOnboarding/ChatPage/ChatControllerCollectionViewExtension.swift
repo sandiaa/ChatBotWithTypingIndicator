@@ -2,7 +2,7 @@
 //  ChatControllerCollectionViewExtension.swift
 //  ChatOnboarding
 //
-//  Created by Manoj Kumar on 18/01/19.
+//  Created by Sandiaa on 18/01/19.
 //  Copyright © 2019 Sandiaa. All rights reserved.
 //
 
@@ -10,8 +10,9 @@ import Foundation
 import UIKit
 import WebKit
 import Photos
+import CropViewController
 
-
+//User defaults.
 let REGISTERED_EMAIL_KEY = "registeredEmail"
 let REGISTERED_PASSWORD = "registeredPassword"
 let REGISTERED_SIGNUP_EMAIL = "signupEmail"
@@ -22,19 +23,20 @@ let REGISTERED_SIGNUP_GENDER = "gender"
 let REGISTERED_SIGNUP_DOB = "dob"
 let REGISTERED_MOBILE = "mobile"
 let REGISTERED_IMAGE = "image"
+
 let str = String()
 let fullImageView = UIImageView()
 let button = UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
 
-
-
-extension ChatController:UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension ChatController:UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, CropViewControllerDelegate{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         var count =  dataSource.count
+        var text = dataSource.last
         if currentSuggestion.count > 0 {
             count += 1
         }
+        
         if shouldShowTypingCell {
             count += 1
         }
@@ -79,12 +81,15 @@ extension ChatController:UICollectionViewDelegate, UICollectionViewDataSource, U
         }
     }
     
+    //Stops typing indicator animation.
+    
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if cell is TypingCell {
             (cell as! TypingCell).activityIndicatorView?.stopAnimating()
         }
     }
 
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if currentSuggestion.count > 0 && indexPath.row == dataSource.count {
             return CGSize(width: UIScreen.main.bounds.width - 20, height: 80)
@@ -121,6 +126,8 @@ extension ChatController:UICollectionViewDelegate, UICollectionViewDataSource, U
         }
         }
 
+    //Executes when the user clicks on the image that he uploaded.
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
        let chat = dataSource[indexPath.row]
         if chat == .avatarUploaded {
@@ -139,16 +146,20 @@ extension ChatController:UICollectionViewDelegate, UICollectionViewDataSource, U
             }
             }
     }
+    
+    //Dismisses the full image view.
+    
     @objc func buttonClicked() {
         fullImageView.alpha = 0
         fullImageView.removeFromSuperview()
     }
     
     override func viewWillLayoutSubviews() {
-        
-            super.viewWillLayoutSubviews()
-            fullImageView.frame = chatCollectionView.frame
-        }
+        super.viewWillLayoutSubviews()
+        fullImageView.frame = chatCollectionView.frame
+    }
+    
+    
     func showFullImage(of image:UIImage) {
         fullImageView.transform = CGAffineTransform(scaleX: 0, y: 0)
         fullImageView.contentMode = .scaleAspectFit
@@ -160,8 +171,6 @@ extension ChatController:UICollectionViewDelegate, UICollectionViewDataSource, U
     }
 
     }
-
-
 
 
 extension ChatController : AllSuggestionsCellDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -214,6 +223,9 @@ extension ChatController : AllSuggestionsCellDelegate, UIImagePickerControllerDe
         }
     }
 
+    
+    //Opens photo gallery or camera for profile photo upload.
+    
     func showPhotos(suggestion : ChatType) {
         let imagePickerController = UIImagePickerController()
         imagePickerController.allowsEditing = false
@@ -226,22 +238,32 @@ extension ChatController : AllSuggestionsCellDelegate, UIImagePickerControllerDe
         imagePickerController.cameraCaptureMode = .photo
         }
         imagePickerController.modalPresentationStyle = .fullScreen
-       
-        
         present(imagePickerController, animated: true, completion: nil)
         
     }
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: nil)
         
         if let imageChosen = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            
-            if let resizedImage = imageChosen.resized(toWidth: 250) {
-                let img = resizedImage.pngData()
-                UserDefaults.standard.set(img, forKey: REGISTERED_IMAGE)
-                dataSource.append(.avatarUploaded)
-                processLastChat()
-            }
+            presentCropViewController(img: imageChosen)
+        }
+    }
+    func presentCropViewController(img : UIImage) {
+        let image: UIImage = img
+        
+        let cropViewController = CropViewController(image: image)
+        cropViewController.delegate = self
+        present(cropViewController, animated: true, completion: nil)
+    }
+    
+    func cropViewController(_ cropViewController: CropViewController, didCropToImage image: UIImage, withRect cropRect: CGRect, angle: Int) {
+        cropViewController.dismiss(animated: true, completion: nil)
+        if let resizedImage = image.resized(toWidth: 250) {
+            let img = resizedImage.pngData()
+            UserDefaults.standard.set(img, forKey: REGISTERED_IMAGE)
+            dataSource.append(.avatarUploaded)
+            processLastChat()
         }
     }
 }
@@ -265,35 +287,53 @@ extension ChatController : UITextFieldDelegate {
 
     }
     
+    //Executes whenever the user clicks on the done button in the keyboard.
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        txtField.resignFirstResponder()
-        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+            self.txtField.resignFirstResponder()
+        }
         let chatType = dataSource.last
         if chatType == .signinEmail || chatType == .wrongSignInEmail {
-            if (txtField.text ?? "").isEmail {
-                UserDefaults.standard.set((txtField.text ?? ""), forKey: REGISTERED_EMAIL_KEY)
+            let txt = txtField.text ?? ""
+            if (txt).isEmail {
+                if UserDataManager.shared.checkEmail(email: txt) {
+                UserDefaults.standard.set(txt, forKey: REGISTERED_EMAIL_KEY)
                 dataSource.append(.signinRegisteredEmail)
                 txtField.text = ""
                 processLastChat()
+                }
+                else {
+                    dataSource.append(.emailDoesnotExist)
+                    processLastChat()
+                }
             }
             else {
                 dataSource.append(.wrongSignInEmail)
                 processLastChat()
             }
         }
-        if chatType == .signupEmail || chatType == .wrongSignupEmail {
-            if (txtField.text ?? "").isEmail{
+        
+        if chatType == .signupEmail || chatType == .wrongSignupEmail || chatType == .emailAlreadyExist{
+            let txt = txtField.text ?? ""
+            if (txt).isEmail {
+                if !UserDataManager.shared.checkEmail(email: txt) {
                 UserDefaults.standard.set((txtField.text ?? ""), forKey: REGISTERED_SIGNUP_EMAIL)
                 dataSource.append(.signupRegisteredEmail)
                 txtField.text = ""
                 processLastChat()
+                }
+                else {
+                    dataSource.append(.emailAlreadyExist)
+                    processLastChat()
+                }
             }
             else {
                 dataSource.append(.wrongSignupEmail)
                 processLastChat()
             }
         }
-        if chatType == .signinPassword || chatType == .signinEmojiPassword || chatType == .signinInvalidPassword {
+        if chatType == .signinPassword || chatType == .signinEmojiPassword || chatType == .signinInvalidPassword || chatType == .PasswordDoesnotMatch{
             if (txtField.text ?? "").count < 6 {
                 dataSource.append(.signinInvalidPassword)
                 processLastChat()
@@ -302,13 +342,16 @@ extension ChatController : UITextFieldDelegate {
                 dataSource.append(.signinEmojiPassword)
                 processLastChat()
             }
-            else {
+            else if UserDataManager.shared.checkPassword(password: txtField.text!){
                 UserDefaults.standard.set((txtField.text ?? ""), forKey: REGISTERED_PASSWORD)
                 dataSource.append(.signinRegisteredPassword)
                 self.txtField.textContentType = .username
                 txtField.text = ""
                 processLastChat()
-                
+            }
+            else {
+                dataSource.append(.PasswordDoesnotMatch)
+                processLastChat()
             }
         }
         if chatType == .signupPassword || chatType == .signupEmojiPassword || chatType == .signupInvalidPassword {

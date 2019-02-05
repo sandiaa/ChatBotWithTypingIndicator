@@ -2,12 +2,14 @@
 //  ChatBrain.swift
 //  ChatOnboarding
 //
-//  Created by Manoj Kumar on 18/01/19.
+//  Created by Sandiaa on 18/01/19.
 //  Copyright © 2019 Sandiaa. All rights reserved.
 //
 
 import Foundation
 import UIKit
+
+//Different input types
 
 enum UserInputTypes {
     case suggestion
@@ -16,10 +18,14 @@ enum UserInputTypes {
     case image
 }
 
+//Determines the origin of a message.
+
 enum OriginType {
     case bot
     case user
 }
+
+//All the possible conversation.
 
 enum ChatType {
     case hi
@@ -29,17 +35,20 @@ enum ChatType {
     case signin
     case signup
     case signinEmail
+    case emailDoesnotExist
     case signinPassword
     case signinRegisteredEmail
     case wrongSignInEmail
     case signinEmojiPassword
     case signinInvalidPassword
+    case PasswordDoesnotMatch
     case signinRegisteredPassword
     case doneSignin
     case signupName
     case wrongSignupName
     case signupRegisteredName
     case signupEmail
+    case emailAlreadyExist
     case signupRegisteredEmail
     case wrongSignupEmail
     case signupPassword
@@ -73,11 +82,13 @@ enum ChatType {
     case doneSignup
     case none
 
+    //Suggestions for the user.
+    
     func getSuggestions() -> [ChatType]{
         switch self {
         case .hi:
             return [.userHi, .hello]
-        case .intro:
+        case .intro,.emailDoesnotExist:
             return [.signin, .signup]
         case .signupGender:
             return [.male, .female]
@@ -91,6 +102,8 @@ enum ChatType {
             return []
         }
     }
+    
+    //Response from bot.
     
     func getBotResponse() -> ChatType {
         switch self {
@@ -139,6 +152,8 @@ enum ChatType {
         }
     }
     
+    //Typing Indicator timer.
+    
     func getTimeDelay()->Double {
         switch self {
         case .intro:
@@ -156,11 +171,13 @@ enum ChatType {
         }
     }
     
+    //Returns conversation origin.
+    
     func getOriginType() -> OriginType{
         switch self {
-        case .hi, .intro, .signinEmail, .signinPassword, .wrongSignInEmail, .signinEmojiPassword, .signinInvalidPassword, .signupName,
-             .wrongSignupName, .signupEmail, .wrongSignupEmail, .signupPassword, .signupEmojiPassword, .signupInvalidPassword, .signupGender,
-             .mobile,.signupDob, .signupWrongDob, .acceptToTerms, .doneSignin, .doneSignup, .wrongMobile,.declineSelected,
+    case .hi, .intro, .signinEmail, .signinPassword, .emailDoesnotExist,.wrongSignInEmail, .signinEmojiPassword,.PasswordDoesnotMatch, .signinInvalidPassword, .signupName,
+        .wrongSignupName, .signupEmail, .wrongSignupEmail, .signupPassword, .signupEmojiPassword, .signupInvalidPassword, .signupGender,.emailAlreadyExist,
+            .mobile,.signupDob, .signupWrongDob, .acceptToTerms, .doneSignin, .doneSignup, .wrongMobile,.declineSelected,
              .confirmPassword, .wrongConfirmPassword, .afterPassword,.uploadAvatar:
             return .bot
         default:
@@ -168,11 +185,13 @@ enum ChatType {
         }
     }
     
+    //Returns placeholder text for the input field.
+    
     func getPlaceholderText() -> String {
         switch self {
-        case .signinEmail, .wrongSignInEmail, .signupEmail, .wrongSignupEmail:
+       case .signinEmail, .wrongSignInEmail, .signupEmail, .wrongSignupEmail,.emailAlreadyExist:
             return "Enter your email"
-        case .signinPassword, .signinEmojiPassword, .signinInvalidPassword,
+        case .signinPassword, .signinEmojiPassword, .signinInvalidPassword,.PasswordDoesnotMatch,
              .signupPassword, .signupEmojiPassword, .signupInvalidPassword:
             return "Enter your Password"
         case .signupName, .wrongSignupName:
@@ -181,6 +200,8 @@ enum ChatType {
             return ""
         }
     }
+    
+    //Returns the actual text to be displayed for a bot's response.
     
     func getChatText() -> String {
         switch self {
@@ -204,8 +225,12 @@ enum ChatType {
             return "Enter your password"
         case .wrongSignInEmail:
             return "Please enter a valid Email"
+        case .emailDoesnotExist:
+            return "Your email doesn't exist. Would you like to signup"
         case .signinInvalidPassword:
             return "Please enter a valid Password with minimum 6 characters"
+        case .PasswordDoesnotMatch:
+            return "Password doenot match"
         case .signinEmojiPassword:
             return "Please enter a password without emoji"
         case .signinRegisteredPassword:
@@ -217,7 +242,7 @@ enum ChatType {
             }
             return str1
         case .doneSignin:
-            return "You are logged in"
+            return "You are logged in to the chatbot"
         case .signupName:
             return "Enter your name"
         case .wrongSignupName:
@@ -230,6 +255,8 @@ enum ChatType {
             return UserDefaults.standard.value(forKey: REGISTERED_SIGNUP_EMAIL) as! String
         case .wrongSignupEmail:
             return "Please enter a valid email"
+        case .emailAlreadyExist:
+            return "Email already exist"
         case .signupPassword:
             return "Enter your password"
         case .signupEmojiPassword:
@@ -297,7 +324,8 @@ enum ChatType {
         case .declineSelected:
             return "You need to accept to signup"
         case .doneSignup:
-            return "Thankyou for signing up"
+            UserDataManager.shared.saveData()
+            return "Hey! \(UserDefaults.standard.value(forKey: REGISTERED_SIGNUP_NAME) as! String), Thankyou for signing up with us. You can signin by clicking the restart button"
             
         default :
             return ""
@@ -305,53 +333,55 @@ enum ChatType {
         }
     }
     
+    //Returns the type of input the user should give.
+    
     func getUserInputType() -> UserInputTypes {
         switch self {
-        case .signinEmail, .signinPassword, .wrongSignInEmail, .signinInvalidPassword, .signinEmojiPassword,.signupName, .wrongSignupName, .signupPassword, .signupEmojiPassword, .signupInvalidPassword, .signupEmail, .wrongSignupEmail, .confirmPassword
+        case .signinEmail, .signinPassword,.wrongSignInEmail, .PasswordDoesnotMatch,.signinInvalidPassword, .signinEmojiPassword,.signupName, .wrongSignupName, .signupPassword, .signupEmojiPassword, .signupInvalidPassword, .signupEmail, .wrongSignupEmail, .emailAlreadyExist,.confirmPassword
         , .mobile, .wrongMobile, .signupWrongDob, .wrongConfirmPassword, .afterPassword:
             return .textField
-        case .fromGallery, .useCamera:
+            
+            case .fromGallery, .useCamera:
             return .image
-        case .signupDob:
+            
+            case .signupDob:
             return .picker
-        default :
+            
+            default :
             return .suggestion
         }
     }
-    func getContentType() -> UITextContentType {
-        switch self{
-        case .signinEmail, .wrongSignInEmail, .signupEmail, .wrongSignupEmail:
-            return .emailAddress
-        case .signinPassword,.signinEmojiPassword,.signinInvalidPassword, .signupPassword,.signupInvalidPassword,.signupEmojiPassword:
-            return .password
-        case .mobile,.wrongMobile:
-            return .telephoneNumber
-        default :
-            return .name
-        }
-    }
+
+    //returns keyboard type for the textfield.
     
     func getKeyboardType() -> UIKeyboardType {
         switch self {
-        case .signinEmail, .wrongSignInEmail, .signupEmail, .wrongSignupEmail:
+           case .signinEmail, .wrongSignInEmail, .signupEmail, .wrongSignupEmail,.emailAlreadyExist:
             return .emailAddress
-        case .signinPassword, .signinInvalidPassword, .signinEmojiPassword, .signupPassword, .signupInvalidPassword, .signupEmojiPassword, .confirmPassword, .wrongConfirmPassword, .afterPassword:
+        case .signinPassword, .signinInvalidPassword,.PasswordDoesnotMatch, .signinEmojiPassword, .signupPassword, .signupInvalidPassword, .signupEmojiPassword, .confirmPassword, .wrongConfirmPassword, .afterPassword:
             return .asciiCapable
-        case .mobile, .wrongMobile:
+            
+            case .mobile, .wrongMobile:
             return .numberPad
-        default:
+            
+            default:
             return .default
         }
     }
     
+    //Determines if textfield is secure text.
+    
     func isTextFieldSecure()->Bool {
         if self == .signinPassword || self == .signinInvalidPassword || self == .signinEmojiPassword ||
             self == .signupPassword || self == .signupEmojiPassword || self == .signupInvalidPassword || self == .wrongConfirmPassword ||
-            self == .afterPassword{
+            self == .afterPassword || self == .PasswordDoesnotMatch{
             return true
         }
         return false
     }
+    
+    //Text modification to display birth date.
+    
     func modifyText(txt : String) -> NSMutableAttributedString {
         let yearAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)]
         let dateAttributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 24)]
@@ -360,13 +390,13 @@ enum ChatType {
         attributedSentence.setAttributes(dateAttributes, range: NSRange(location: 0, length: 6))
         return attributedSentence
     }
+    
+    //Converts data to image -- profile photo
     func getImage() -> UIImage {
         let image = UserDefaults.standard.value(forKey: REGISTERED_IMAGE)
         let imageView = UIImage(data: image as! Data)
         return imageView!
         
     }
-    
-    
     
 }

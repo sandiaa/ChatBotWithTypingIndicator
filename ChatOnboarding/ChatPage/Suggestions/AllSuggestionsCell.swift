@@ -2,8 +2,8 @@
 //  AllSuggestionsCell.swift
 //  ChatBotApp
 //
-//  Created by Admin on 08/01/19.
-//  Copyright © 2019 Admin. All rights reserved.
+//  Created by Sandiaa on 08/01/19.
+//  Copyright © 2019 Sandiaa. All rights reserved.
 //
 
 import UIKit
@@ -47,6 +47,7 @@ class AllSuggestionsCell: UICollectionViewCell {
 
 
 extension AllSuggestionsCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return allSuggestions.count
     }

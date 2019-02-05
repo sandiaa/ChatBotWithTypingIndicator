@@ -2,7 +2,7 @@
 //  StringExtension.swift
 //  ChatOnboarding
 //
-//  Created by Manoj Kumar on 18/01/19.
+//  Created by Sandiaa on 18/01/19.
 //  Copyright © 2019 Sandiaa. All rights reserved.
 //
 
@@ -18,6 +18,7 @@ extension String {
         }
         return false;
     }
+
     var isName:Bool {
             let RegEx = "^\\w{5,18}$"
             let Test = NSPredicate(format:"SELF MATCHES %@", RegEx)
@@ -137,35 +138,9 @@ extension UnicodeScalar {
     }
 }
 extension String {
-//    func verifyForPassword() -> (Bool, String?) {
-//        if count == 0 {
-//            return (false, "porfavor ingrese una contraseña")
-//        }
-//        if count < 6 || containsEmoji {
-//            return (false,"Por favor introduce una contraseña válida")
-//        }
-//        return(true, nil)
-//    }
-    
-//    func verifyForTabellaConfirmPassword() -> (Bool, String?) {
-//
-//        if count == 0 {
-//            return (false, "Por favor confirme la contraseña")
-//        }
-//
-//        if containsEmoji {
-//            return (false, "Por favor introduce una contraseña válida")
-//        }
-//
-//        if count < 6 {
-//            return (false, "Por favor introduce una contraseña válida")
-//        }
-//        return(true, nil)
-//    }
-    
+
     func checkIfBothAreSame(firstString : String, otherString:String)->Bool {
 
-      //  if firstString.trim().uppercased() == otherString.trim().uppercased() {
         if firstString.trim() == otherString.trim() {
             return true
         }
