@@ -156,7 +156,7 @@ enum ChatType {
     
     func getTimeDelay()->Double {
         switch self {
-        case .intro:
+        case .intro,.signin,.signup:
             return 1.0
         case .doneSignin, .doneSignup:
             return 3.0

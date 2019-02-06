@@ -314,9 +314,8 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
         let alert = UIAlertController(title: "Alert", message: "Would you like to Restart", preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-              self.txtField.resignFirstResponder()
-            }
+            self.txtField.resignFirstResponder()
+            
             self.txtField.text = ""
             self.datePickerView.isHidden = true
             
@@ -360,9 +359,9 @@ class ChatController: UIViewController , SFSafariViewControllerDelegate{
     
     @IBAction func numberDoneButton(_ sender: UIButton) {
         view.endEditing(true)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+
             self.txtField.resignFirstResponder()
-        }
+        
         if CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: (txtField.text ?? ""))){
         if (txtField.text ?? "").count < 10 {
             dataSource.append(.wrongMobile)

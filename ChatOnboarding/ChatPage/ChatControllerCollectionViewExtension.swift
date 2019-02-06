@@ -32,7 +32,6 @@ extension ChatController:UICollectionViewDelegate, UICollectionViewDataSource, U
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         var count =  dataSource.count
-        var text = dataSource.last
         if currentSuggestion.count > 0 {
             count += 1
         }
@@ -254,6 +253,7 @@ extension ChatController : AllSuggestionsCellDelegate, UIImagePickerControllerDe
         
         let cropViewController = CropViewController(image: image)
         cropViewController.delegate = self
+        cropViewController.aspectRatioPreset = .presetSquare
         present(cropViewController, animated: true, completion: nil)
     }
     
@@ -290,9 +290,9 @@ extension ChatController : UITextFieldDelegate {
     //Executes whenever the user clicks on the done button in the keyboard.
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+     
             self.txtField.resignFirstResponder()
-        }
+        
         let chatType = dataSource.last
         if chatType == .signinEmail || chatType == .wrongSignInEmail {
             let txt = txtField.text ?? ""
